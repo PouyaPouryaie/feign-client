@@ -12,10 +12,12 @@ public class FeignClientConfig {
 
     @Bean
     public FeignClient feignClient(FeignClientErrorDecoder feignClientErrorDecoder,
+                                   FeignClientHeaderRequestInterceptor feignClientHeaderRequestInterceptor,
                                    FeignClientLogger feignClientLogger) {
         return Feign.builder()
                 .encoder(new JacksonEncoder())
                 .decoder(new JacksonDecoder())
+                .requestInterceptor(feignClientHeaderRequestInterceptor)
                 .logger(feignClientLogger)
                 .errorDecoder(feignClientErrorDecoder)
                 .logLevel(Logger.Level.FULL)
