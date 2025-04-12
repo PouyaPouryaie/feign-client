@@ -12,6 +12,6 @@ public class FeignClientHeaderRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         requestTemplate.header("X-Client-Requester", "client");
-        requestTemplate.header("uuid", UUID.randomUUID().toString());
+        requestTemplate.header("X-UUID", UUID.randomUUID().toString());
     }
 }
