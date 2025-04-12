@@ -1,5 +1,7 @@
 package ir.bigz.spring.client;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Builder
@@ -9,7 +11,10 @@ import lombok.*;
 @NoArgsConstructor
 public class OrderResponse {
 
+    @NotNull
     private long orderId;
     private double price;
+    @NotNull
+    @NotBlank
     private String description;
 }
