@@ -1,12 +1,9 @@
 package ir.bigz.spring.client.feignclient;
 
-import feign.Feign;
 import feign.RetryableException;
 import feign.Retryer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 public class FeignClientRetryer implements feign.Retryer {
 
