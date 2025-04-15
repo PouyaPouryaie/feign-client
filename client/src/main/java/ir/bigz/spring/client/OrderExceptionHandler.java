@@ -20,10 +20,7 @@ public class OrderExceptionHandler {
 
     @ExceptionHandler(FeignClientServerException.class)
     public ResponseEntity<? extends ErrorResponse> handleServerException(FeignClientServerException e) {
-        if(Objects.nonNull(e.getStatusCode())) {
-            return ResponseEntity.status(e.getStatusCode()).body(getErrorResponse(e));
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(getErrorResponse(e));
+        return ResponseEntity.status(e.getStatusCode()).body(getErrorResponse(e));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -31,7 +28,9 @@ public class OrderExceptionHandler {
     public void handleRuntimeException(RuntimeException e) {}
 
     private ErrorResponse getErrorResponse(FeignClientServerException e) {
-        return ErrorResponse.builder().errorCode(e.getErrorCode()).message(e.getMessage()).build();
+        return ErrorResponse.builder()
+                .errorCode(Objects.nonNull(e.getErrorCode()) ? e.getErrorCode() : "9999")
+                .message(Objects.nonNull(e.getMessage()) ? e.getMessage() : "unknown Server Error").build();
     }
 
     @Builder
