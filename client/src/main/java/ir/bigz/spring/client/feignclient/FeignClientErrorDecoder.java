@@ -2,6 +2,7 @@ package ir.bigz.spring.client.feignclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
+import feign.RetryableException;
 import feign.codec.ErrorDecoder;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,14 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
                     .readValue(response.body().asInputStream(), ErrorResponseFeignClient.class);
 
             final ErrorResponseFeignClient errorResponse = basicErrorResponse.toBuilder().status(response.status()).build();
+
+            if(errorResponse.getStatus() >= 500) {
+                return new RetryableException(errorResponse.getStatus(),
+                        errorResponse.getMessage(),
+                        response.request().httpMethod(),
+                        0L,
+                        response.request());
+            }
 
             throw new FeignClientServerException(errorResponse.getStatus(),
                     Objects.nonNull(errorResponse.getMessage()) ? errorResponse.getMessage() : Objects.nonNull(errorResponse.getError()) ? errorResponse.getError() : "Feign Client Unknown Error",
