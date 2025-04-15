@@ -1,7 +1,5 @@
 package ir.bigz.spring.client;
 
-import ir.bigz.spring.client.feignclient.FeignClient;
-import ir.bigz.spring.client.feignclient.FeignClientErrorDecoder;
 import ir.bigz.spring.client.feignclient.FeignClientServerException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +23,7 @@ public class OrderExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
-    public void handleRuntimeException(RuntimeException e) {}
+    public void handleRuntimeException(RuntimeException ignored) {}
 
     private ErrorResponse getErrorResponse(FeignClientServerException e) {
         return ErrorResponse.builder()
