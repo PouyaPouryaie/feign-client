@@ -11,7 +11,7 @@ This example showcases the following customizations for the Feign client in the 
 3.  **Customized Error Decoder:** Illustrates how to implement Feign's `ErrorDecoder` to handle different error responses from the `server`.
 4.  **Customized Retry Strategy:** Provides an example of implementing Feign's `Retryer` interface to define a specific retry mechanism for failed requests to the `server`.
 5.  **Extra:**
-    - **Advantage Of Interface**: We can use interface future such as default methods. A default method allows us to add some logic to a call method. please check the default method of `FeignClient` class 
+    - **Advantage Of Interface**: We can use interface futures such as default methods. A default method allows us to add some logic to a call method. please check the default method of `FeignClient` class 
 
 ## Repository Structure
 
