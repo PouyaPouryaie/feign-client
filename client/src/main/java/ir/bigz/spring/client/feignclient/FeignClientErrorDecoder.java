@@ -30,13 +30,13 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
 
             final ErrorResponseFeignClient errorResponse = basicErrorResponse.toBuilder().status(response.status()).build();
 
-            if(errorResponse.getStatus() >= 500) {
-                return new RetryableException(errorResponse.getStatus(),
-                        errorResponse.getMessage(),
-                        response.request().httpMethod(),
-                        0L,
-                        response.request());
-            }
+//            if(errorResponse.getStatus() >= 500) {
+//                return new RetryableException(errorResponse.getStatus(),
+//                        errorResponse.getMessage(),
+//                        response.request().httpMethod(),
+//                        0L,
+//                        response.request());
+//            }
 
             throw new FeignClientServerException(errorResponse.getStatus(),
                     Objects.nonNull(errorResponse.getMessage()) ? errorResponse.getMessage() : Objects.nonNull(errorResponse.getError()) ? errorResponse.getError() : "Feign Client Unknown Error",
