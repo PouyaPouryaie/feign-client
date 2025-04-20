@@ -15,6 +15,10 @@ public class FeignClientRetryer implements feign.Retryer {
     int attempt;
     long startTime = this.currentTimeMillis();
 
+    public FeignClientRetryer() {
+        this(3, 1000, 3000); // Default: 3 attempts, 1 second initial delay, 3 seconds max delay
+    }
+
     public FeignClientRetryer(int maxAttempts, long period, long maxPeriod) {
         this.maxAttempts = maxAttempts;
         this.period = period;

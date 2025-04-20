@@ -7,7 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class FeignClientLogger extends Logger {
 
-    org.slf4j.Logger logger = LoggerFactory.getLogger(FeignClientLogger.class);
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(FeignClientLogger.class);
+
+    public FeignClientLogger() {
+        super();
+    }
 
     @Override
     protected void log(String configKey, String template, Object... objects) {
