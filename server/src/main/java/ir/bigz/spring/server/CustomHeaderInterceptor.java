@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,7 +25,7 @@ public class CustomHeaderInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(Objects.isNull(request.getHeader("X-Client-Requester"))) {
-            throw new ServerException("Client not allowed", "10002");
+            throw new ServerException(HttpStatus.BAD_REQUEST.value(), "10002", "Client not allowed");
         }
 
         serverHeaderHolder.setXClientRequester(request.getHeader("X-Client-Requester"));

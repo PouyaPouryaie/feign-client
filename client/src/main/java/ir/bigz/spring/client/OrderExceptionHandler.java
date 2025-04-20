@@ -21,6 +21,11 @@ public class OrderExceptionHandler {
         return ResponseEntity.status(e.getStatusCode()).body(getErrorResponse(e));
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<? extends ErrorResponse> handleServerException(ValidationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getErrorResponse(e));
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     public void handleRuntimeException(RuntimeException ignored) {}
@@ -29,6 +34,12 @@ public class OrderExceptionHandler {
         return ErrorResponse.builder()
                 .errorCode(Objects.nonNull(e.getErrorCode()) ? e.getErrorCode() : "9999")
                 .message(Objects.nonNull(e.getMessage()) ? e.getMessage() : "unknown Server Error").build();
+    }
+
+    private ErrorResponse getErrorResponse(ValidationException e) {
+        return ErrorResponse.builder()
+                .errorCode(e.getErrorCode())
+                .message(e.getMessage()).build();
     }
 
     @Builder

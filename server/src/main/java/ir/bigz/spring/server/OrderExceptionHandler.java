@@ -15,15 +15,21 @@ public class OrderExceptionHandler {
 
     @ExceptionHandler(ServerException.class)
     public ResponseEntity<? extends ErrorResponse> handleServerException(ServerException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(getErrorResponse(e));
+        return ResponseEntity.status(e.getStatusCode()).body(getErrorResponse(e));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
-    public void handleRuntimeException(RuntimeException e) {}
+    public ErrorResponse handleRuntimeException(RuntimeException e) {
+        return getErrorResponse(e);
+    }
 
     private ErrorResponse getErrorResponse(ServerException e) {
         return ErrorResponse.builder().errorCode(e.getErrorCode()).message(e.getMessage()).build();
+    }
+
+    private ErrorResponse getErrorResponse(RuntimeException e) {
+        return ErrorResponse.builder().errorCode("9999").message(e.getMessage()).build();
     }
 
     @Builder

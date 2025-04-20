@@ -19,6 +19,6 @@ public class OrderService {
     }
 
     public OrderResponse getOrderById(long orderId) {
-        return feignClient.getOrderById(orderId);
+        return feignClient.getOrderByIdValidation(orderId);
     }
 }

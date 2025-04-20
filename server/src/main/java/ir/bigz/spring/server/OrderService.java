@@ -1,5 +1,6 @@
 package ir.bigz.spring.server;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class OrderService {
         if (first.isPresent()) {
             return first.get();
         } else {
-            throw new ServerException("data not found", "10001");
+            throw new ServerException(HttpStatus.NOT_FOUND.value(), "10001", "data not found");
         }
     }
 
