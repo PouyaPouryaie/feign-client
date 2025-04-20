@@ -11,7 +11,8 @@ This example showcases the following customizations for the Feign client in the 
 3.  **Customized Error Decoder:** Illustrates how to implement Feign's `ErrorDecoder` to handle different error responses from the `server`.
 4.  **Customized Retry Strategy:** Provides an example of implementing Feign's `Retryer` interface to define a specific retry mechanism for failed requests to the `server`.
 5.  **Extra:**
-    - **Advantage Of Interface**: We can use interface futures such as default methods. A default method allows us to add some logic to a call method. please check the default method of `FeignClient` class 
+    - **Advantage Of Interface**: We can use interface futures such as default methods. A default method allows us to add some logic to a call method. please check the default method of `FeignClient` class
+    - **Timeouts**: Some API calls can take a long time to respond. To prevent the application stuck waiting for the response a good practice is to interrupt such a call after some defined duration. please check the default method of `FeignClientConfig` class
 
 ## Repository Structure
 
@@ -167,19 +168,25 @@ public class FeignClientRetryer implements feign.Retryer {
 This class demonstrates how to build the Feign client programmatically using Feign.builder() and injecting the custom components (FeignClientHeaderRequestInterceptor, FeignClientLogger, FeignClientErrorDecoder, FeignClientRetryer).
 
 ```Java
-@Bean
-public FeignClient feignClient(FeignClientErrorDecoder feignClientErrorDecoder,
-                               FeignClientHeaderRequestInterceptor feignClientHeaderRequestInterceptor,
-                               FeignClientLogger feignClientLogger) {
-    return Feign.builder()
-            .encoder(new JacksonEncoder())
-            .decoder(new JacksonDecoder())
-            .requestInterceptor(feignClientHeaderRequestInterceptor)
-            .logger(feignClientLogger)
-            .errorDecoder(feignClientErrorDecoder)
-            .logLevel(Logger.Level.FULL)
-            .retryer(new FeignClientRetryer(5, 200L, TimeUnit.SECONDS.toMillis(3L)))
-            .target(FeignClient.class, "http://localhost:9090");
+// client/src/main/java/ir/bigz/spring/client/feignclient/FeignClientConfig.java
+@Configuration
+public class FeignClientConfig {
+
+    @Bean
+    public FeignClient feignClient(FeignClientErrorDecoder feignClientErrorDecoder,
+                                   FeignClientHeaderRequestInterceptor feignClientHeaderRequestInterceptor,
+                                   FeignClientLogger feignClientLogger) {
+        return Feign.builder()
+                .encoder(new JacksonEncoder())
+                .decoder(new JacksonDecoder())
+                .requestInterceptor(feignClientHeaderRequestInterceptor)
+                .logger(feignClientLogger)
+                .errorDecoder(feignClientErrorDecoder)
+                .logLevel(Logger.Level.FULL)
+                .options(new Request.Options(5, TimeUnit.SECONDS, 10, TimeUnit.SECONDS, false))
+                .retryer(new FeignClientRetryer(5, 200L, TimeUnit.SECONDS.toMillis(3L)))
+                .target(FeignClient.class, "http://localhost:9090");
+    }
 }
 ```
 

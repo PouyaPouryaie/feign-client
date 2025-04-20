@@ -26,6 +26,12 @@ public class OrderController {
 
         logBeforeRequest("getAllOrders");
 
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         List<OrderResponse> orders = orderService.getOrders();
         return ResponseEntity.ok(orders);
     }
